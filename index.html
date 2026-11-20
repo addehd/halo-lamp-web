@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Halo lamp — Kotlin/Wasm parametric generator</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <aside id="panel">
+    <h1>Halo lamp <small>Kotlin → WasmGC → three.js · printable projector lamp inspired by Mandalaki's Halo Edition</small></h1>
+    <div id="status" class="status">loading Kotlin/Wasm…</div>
+    <p class="models"><a href="print/">Print-ready STLs + build guide →</a> · <a href="https://addehd.github.io/miswak-adapter-web/">Magic Stick</a></p>
+
+    <div class="seg" id="modes">
+      <button data-mode="lamp" class="on">Lamp + wall</button>
+      <button data-mode="head">Head</button>
+      <button data-mode="exploded">Exploded</button>
+      <button data-mode="part">One part</button>
+    </div>
+    <div class="row" id="partRow" style="display:none">
+      <label>Part</label>
+      <select id="part"></select>
+    </div>
+
+    <h2>Light</h2>
+    <div class="ctl"><div class="top"><label>Focus (LED carriage: back → forward)</label><span id="focusv"></span></div>
+      <input type="range" id="focus" min="0" max="1" step="0.01" value="0.86"></div>
+    <div class="ctl"><div class="top"><label>Wall distance</label><span id="wallv"></span></div>
+      <input type="range" id="wall" min="0.3" max="3" step="0.05" value="0.8"></div>
+    <div class="presets" id="presets"></div>
+    <section id="optics"><table id="opticsTable"></table>
+      <p class="foot">Kotlin ray trace of the current lens / focus (point LED, 560 nm). Wall colours are the Python Monte-Carlo
+        simulation (real refraction + dispersion, gel/dye curves are approximations) — see <a href="print/#gradient">the gradient guide</a>.</p></section>
+
+    <h2>Shape</h2>
+    <div id="controls"></div>
+    <div class="row">
+      <label>Live mesh quality</label>
+      <select id="quality"><option value="2">draft</option><option value="1.4" selected>normal</option><option value="0.9">fine</option></select>
+    </div>
+    <div class="row buttons">
+      <button id="dl">⬇ STL of shown part</button>
+      <button id="reset" class="ghost">Reset</button>
+    </div>
+    <pre id="info"></pre>
+    <p class="foot">Live meshes are a signed-distance rebuild of the same CSG tree as <code>halo_lamp.py</code> (IoU 0.98–0.999 vs the manifold3d STLs).
+      For printing, use the exact STLs on the <a href="print/">print page</a>.</p>
+  </aside>
+  <main id="view"><canvas id="c"></canvas><div id="fallback" hidden></div></main>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
